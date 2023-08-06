@@ -1,6 +1,6 @@
 specVersion: 0.0.2
-description: DAMX
-repository: https://github.com/damx0x/damx-subgraph
+description: CION
+repository: https://github.com/Cion0x/Cion-Subgraph
 schema:
   file: ./schema.graphql
 
