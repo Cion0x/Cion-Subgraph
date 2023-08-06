@@ -1,0 +1,161 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PositionRouter
+    network: kava-evm-testnet
+    source:
+      address: "0xAcFA4ED5EBdA687F5B3F9cAc872B285b153dB7B1"
+      abi: PositionRouter
+      startBlock: 6636028
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - CreateIncreasePosition
+        - CreateDecreasePosition
+      abis:
+        - name: PositionRouter
+          file: ./abis/PositionRouter.json
+      eventHandlers:
+        - event: CreateIncreasePosition(indexed address,address[],address,uint256,uint256,uint256,bool,uint256,uint256,uint256,uint256,uint256,uint256)
+          handler: handleCreateIncreasePosition
+        - event: CreateDecreasePosition(indexed address,address[],address,uint256,uint256,bool,address,uint256,uint256,uint256,uint256,uint256,uint256)
+          handler: handleCreateDecreasePosition
+      file: ./src/mapping.ts
+  
+  - kind: ethereum/contract
+    name: RewardRouterV2
+    network: kava-evm-testnet
+    source:
+      address: "0x026D02b3b66A25f6D2767A7E2f7E188AEc480275"
+      abi: RewardRouterV2
+      startBlock: 6602075
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - StakeCion
+        - UnstakeCion
+        - StakeClp
+        - UnstakeClp
+      abis:
+        - name: RewardRouterV2
+          file: ./abis/RewardRouterV2.json
+      eventHandlers:
+        - event: StakeCion(address,address,uint256)
+          handler: handleStakeCion
+        - event: UnstakeCion(address,address,uint256)
+          handler: handleUnstakeCion
+        - event: StakeClp(address,uint256)
+          handler: handleStakeClp
+        - event: UnstakeClp(address,uint256)
+          handler: handleUnstakeClp
+      file: ./src/mapping.ts
+
+  - kind: ethereum/contract
+    name: Vault
+    network: kava-evm-testnet
+    source:
+      startBlock: 6635623
+      address: "0xA66334B71cf4aaD294D29AAd538EC7e576E67dee"
+      abi: Vault
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        # - BuyUSDC
+        - ClosePosition
+        - CollectMarginFees
+        # - CollectSwapFees
+        # - DecreaseGuaranteedUsd
+        # - DecreasePoolAmount
+        - DecreasePosition
+        # - DecreaseReservedAmount
+        # - DecreaseUsdcAmount
+        # - DirectPoolDeposit
+        # - IncreaseGuaranteedUsd
+        # - IncreasePoolAmount
+        - IncreasePosition
+        # - IncreaseReservedAmount
+        # - IncreaseUsdcAmount
+        - LiquidatePosition
+        # - SellUSDC
+        - Swap
+        # - UpdateFundingRate
+        # - UpdatePnl
+        # - UpdatePosition
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+      eventHandlers:
+        # - event: BuyUSDC(address,address,uint256,uint256,uint256)
+        #   handler: handleBuyUSDC
+        - event: ClosePosition(bytes32,uint256,uint256,uint256,uint256,uint256,int256)
+          handler: handleClosePosition
+        - event: CollectMarginFees(address,uint256,uint256)
+          handler: handleCollectMarginFees
+        - event: CollectSwapFees(address,uint256,uint256)
+          handler: handleCollectSwapFees
+        # - event: DecreaseGuaranteedUsd(address,uint256)
+        #   handler: handleDecreaseGuaranteedUsd
+        # - event: DecreasePoolAmount(address,uint256)
+        #   handler: handleDecreasePoolAmount
+        - event: DecreasePosition(bytes32,address,address,address,uint256,uint256,bool,uint256,uint256)
+          handler: handleDecreasePosition
+        # - event: DecreaseReservedAmount(address,uint256)
+        #   handler: handleDecreaseReservedAmount
+        # - event: DecreaseUsdcAmount(address,uint256)
+        #   handler: handleDecreaseUsdcAmount
+        # - event: DirectPoolDeposit(address,uint256)
+        #   handler: handleDirectPoolDeposit
+        # - event: IncreaseGuaranteedUsd(address,uint256)
+        #   handler: handleIncreaseGuaranteedUsd
+        # - event: IncreasePoolAmount(address,uint256)
+        #   handler: handleIncreasePoolAmount
+        - event: IncreasePosition(bytes32,address,address,address,uint256,uint256,bool,uint256,uint256)
+          handler: handleIncreasePosition
+        # - event: IncreaseReservedAmount(address,uint256)
+        #   handler: handleIncreaseReservedAmount
+        # - event: IncreaseUsdcAmount(address,uint256)
+        #   handler: handleIncreaseUsdcAmount
+        - event: LiquidatePosition(bytes32,address,address,address,bool,uint256,uint256,uint256,int256,uint256)
+          handler: handleLiquidatePosition
+        # - event: SellUSDC(address,address,uint256,uint256,uint256)
+        #   handler: handleSellUSDC
+        - event: Swap(address,address,address,uint256,uint256,uint256,uint256)
+          handler: handleSwap
+        # - event: UpdateFundingRate(address,uint256)
+        #   handler: handleUpdateFundingRate
+        # - event: UpdatePnl(bytes32,bool,uint256)
+        #   handler: handleUpdatePnl
+        # - event: UpdatePosition(bytes32,uint256,uint256,uint256,uint256,uint256,int256)
+        #   handler: handleUpdatePosition
+      file: ./src/mapping.ts
+
+  - kind: ethereum/contract
+    name: ClpManager
+    network: kava-evm-testnet
+    source:
+      address: "0x36694865C005cEd386E6DC78C7809cF4F21eC19C"
+      abi: ClpManager
+      startBlock: 6636149
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - HourlyClpStat
+      abis:
+        - name: ClpManager
+          file: ./abis/ClpManager.json
+      eventHandlers:
+        - event: AddLiquidity(address,address,uint256,uint256,uint256,uint256,uint256)
+          handler: handleAddLiquidity
+        - event: RemoveLiquidity(address,address,uint256,uint256,uint256,uint256,uint256)
+          handler: handleRemoveLiquidity
+      file: ./src/mapping.ts

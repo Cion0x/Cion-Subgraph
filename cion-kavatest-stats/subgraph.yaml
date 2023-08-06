@@ -1,0 +1,273 @@
+specVersion: 0.0.2
+description: DAMX
+repository: https://github.com/damx0x/damx-subgraph
+schema:
+  file: ./schema.graphql
+
+dataSources:
+  - kind: ethereum/contract
+    name: ChainlinkAggregatorWBTC
+    network: Kava EVM Testnet
+    source:
+      address: "0x7b75c06e6fd31265E30c1a0d24e8F62317edA0FA"
+      abi: ChainlinkAggregator
+      startBlock: 56700000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - ChainlinkPrice
+        - CandlePrice
+      abis:
+        - name: ChainlinkAggregator
+          file: ./abis/ChainlinkAggregator.json
+      eventHandlers:
+        - event: AnswerUpdated(indexed int256,indexed uint256,uint256)
+          handler: handleAnswerUpdatedBTC
+      file: ./src/pricesMapping.ts
+
+  - kind: ethereum/contract
+    name: ClpManager
+    network: Kava EVM Testnet
+    source:
+      address: "0x36694865C005cEd386E6DC78C7809cF4F21eC19C"
+      abi: ClpManager
+      startBlock: 6601665
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - HourlyClpStat
+      abis:
+        - name: ClpManager
+          file: ./abis/ClpManager.json
+      eventHandlers:
+        - event: AddLiquidity(address,address,uint256,uint256,uint256,uint256,uint256)
+          handler: handleAddLiquidity
+        - event: RemoveLiquidity(address,address,uint256,uint256,uint256,uint256,uint256)
+          handler: handleRemoveLiquidity
+      file: ./src/mapping.ts
+
+  - kind: ethereum/contract
+    name: OrderBook
+    network: Kava EVM Testnet
+    source:
+      address: "0xDa6F56C0008263B9Bb7D89e5eC20248cC634Cf6D"
+      abi: OrderBook
+      startBlock: 6604631
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Order
+      abis:
+        - name: OrderBook
+          file: ./abis/OrderBook.json
+      eventHandlers:
+        - event: CreateIncreaseOrder(indexed address,uint256,address,uint256,address,address,uint256,bool,uint256,bool,uint256)
+          handler: handleCreateIncreaseOrder
+        - event: CancelIncreaseOrder(indexed address,uint256,address,uint256,address,address,uint256,bool,uint256,bool,uint256)
+          handler: handleCancelIncreaseOrder
+        - event: ExecuteIncreaseOrder(indexed address,uint256,address,uint256,address,address,uint256,bool,uint256,bool,uint256,uint256)
+          handler: handleExecuteIncreaseOrder
+
+        - event: CreateDecreaseOrder(indexed address,uint256,address,uint256,address,uint256,bool,uint256,bool,uint256)
+          handler: handleCreateDecreaseOrder
+        - event: CancelDecreaseOrder(indexed address,uint256,address,uint256,address,uint256,bool,uint256,bool,uint256)
+          handler: handleCancelDecreaseOrder
+        - event: ExecuteDecreaseOrder(indexed address,uint256,address,uint256,address,uint256,bool,uint256,bool,uint256,uint256)
+          handler: handleExecuteDecreaseOrder
+
+        - event: CreateSwapOrder(indexed address,uint256,address[],uint256,uint256,uint256,bool,bool,uint256)
+          handler: handleCreateSwapOrder
+        - event: CancelSwapOrder(indexed address,uint256,address[],uint256,uint256,uint256,bool,bool,uint256)
+          handler: handleCancelSwapOrder
+        - event: ExecuteSwapOrder(indexed address,uint256,address[],uint256,uint256,uint256,uint256,bool,bool,uint256)
+          handler: handleExecuteSwapOrder
+      file: ./src/ordersMapping.ts
+
+  - kind: ethereum/contract
+    name: FastPriceEvents
+    network: Kava EVM Testnet
+    source:
+      address: "0xdaBCf3eff14Fb9BC07AdacbC3FC194FaBB81fd20"
+      abi: FastPriceEvents
+      startBlock: 6621141
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - FastPrice
+      abis:
+        - name: FastPriceEvents
+          file: ./abis/FastPriceEvents.json
+      eventHandlers:
+        - event: PriceUpdate(address,uint256,address)
+          handler: handlePriceUpdate
+      file: ./src/pricesMapping.ts
+
+  # - kind: ethereum/contract
+  #   name: UniswapPool
+  #   network: Kava EVM Testnet
+  #   source:
+  #     address: "0x80A9ae39310abf666A87C743d6ebBD0E8C42158E"
+  #     abi: UniswapPoolV3
+  #     startBlock: 200000
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.4
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - UniswapPrice
+  #     abis:
+  #       - name: UniswapPoolV3
+  #         file: ./abis/UniswapPoolV3.json
+  #     eventHandlers:
+  #       - event: Swap(indexed address,indexed address,int256,int256,uint160,uint128,int24)
+  #         handler: handleUniswapCionEthSwap
+  #     file: ./src/pricesMapping.ts
+
+  - kind: ethereum/contract
+    name: FeeCionRewardDistributor
+    network: Kava EVM Testnet
+    source:
+      address: "0x04d50e6923B226faB070DAFD6b85b3FF351E7807"
+      abi: RewardDistributor
+      startBlock: 57689415
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - CionStat
+      abis:
+        - name: RewardDistributor
+          file: ./abis/RewardDistributor.json
+      eventHandlers:
+        - event: Distribute(uint256)
+          handler: handleDistributeEthToCion
+      file: ./src/mapping.ts
+
+  # - kind: ethereum/contract
+  #   name: EscionCionRewardDistributor
+  #   network: Kava EVM Testnet
+  #   source:
+  #     address: "0x23208B91A98c7C1CD9FE63085BFf68311494F193"
+  #     abi: RewardDistributor
+  #     startBlock: 218204
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.4
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - CionStat
+  #     abis:
+  #       - name: RewardDistributor
+  #         file: ./abis/RewardDistributor.json
+  #     eventHandlers:
+  #       - event: Distribute(uint256)
+  #         handler: handleDistributeEscionToCion
+  #     file: ./src/mapping.ts
+
+  - kind: ethereum/contract
+    name: FeeClpRewardDistributor
+    network: Kava EVM Testnet
+    source:
+      address: "0xE24d1F49C2c31fFc010325fdC02624Ef9924cf9A"
+      abi: RewardDistributor
+      startBlock: 6635132
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - CionStat
+      abis:
+        - name: RewardDistributor
+          file: ./abis/RewardDistributor.json
+      eventHandlers:
+        - event: Distribute(uint256)
+          handler: handleDistributeEthToClp
+      file: ./src/mapping.ts
+
+  # - kind: ethereum/contract
+  #   name: EscionClpRewardDistributor
+  #   network: Kava EVM Testnet
+  #   source:
+  #     address: "0x60519b48ec4183a61ca2B8e37869E675FD203b34"
+  #     abi: RewardDistributor
+  #     startBlock: 218208
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.4
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - CionStat
+  #     abis:
+  #       - name: RewardDistributor
+  #         file: ./abis/RewardDistributor.json
+  #     eventHandlers:
+  #       - event: Distribute(uint256)
+  #         handler: handleDistributeEscionToClp
+  #     file: ./src/mapping.ts
+
+  - kind: ethereum/contract
+    name: Vault
+    network: Kava EVM Testnet
+    source:
+      address: "0xA66334B71cf4aaD294D29AAd538EC7e576E67dee"
+      abi: Vault
+      startBlock: 6600394
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Swap
+        - IncreasePosition
+        - DecreasePosition
+        - HourlyVolume
+        - HourlyVolumeBySource
+        - HourlyVolumeByToken
+        - HourlyFee
+        - Transaction
+        - FundingFee
+      abis:
+        - name: Vault
+          file: ./abis/VaultV2.json
+      eventHandlers:
+        - event: UpdateFundingRate(address,uint256)
+          handler: handleUpdateFundingRate
+        - event: Swap(address,address,address,uint256,uint256,uint256,uint256)
+          handler: handleSwap
+        - event: CollectMarginFees(address,uint256,uint256)
+          handler: handleCollectMarginFees
+        - event: BuyUSDC(address,address,uint256,uint256,uint256)
+          handler: handleBuyUSDC
+        - event: SellUSDC(address,address,uint256,uint256,uint256)
+          handler: handleSellUSDC
+        - event: IncreasePosition(bytes32,address,address,address,uint256,uint256,bool,uint256,uint256)
+          handler: handleIncreasePosition
+        - event: DecreasePosition(bytes32,address,address,address,uint256,uint256,bool,uint256,uint256)
+          handler: handleDecreasePosition
+        - event: UpdatePosition(bytes32,uint256,uint256,uint256,uint256,uint256,int256,uint256)
+          handler: handleUpdatePosition
+        - event: LiquidatePosition(bytes32,address,address,address,bool,uint256,uint256,uint256,int256,uint256)
+          handler: handleLiquidatePosition
+        - event: IncreasePoolAmount(address,uint256)
+          handler: handleIncreasePoolAmount
+        - event: DecreasePoolAmount(address,uint256)
+          handler: handleDecreasePoolAmount
+        - event: IncreaseReservedAmount(address,uint256)
+          handler: handleIncreaseReservedAmount
+        - event: DecreaseReservedAmount(address,uint256)
+          handler: handleDecreaseReservedAmount
+        - event: IncreaseUsdcAmount(address,uint256)
+          handler: handleIncreaseUsdcAmount
+        - event: DecreaseUsdcAmount(address,uint256)
+          handler: handleDecreaseUsdcAmount
+      file: ./src/mapping.ts

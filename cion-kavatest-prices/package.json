@@ -1,0 +1,16 @@
+{
+  "name": "damx-ftm-prices",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --access-token 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 --node https://api.thegraph.com/deploy/ damx0x/damx-ftm-prices",
+    "create-local": "graph create damx0x/damx-ftm-prices --node http://127.0.0.1:8020",
+    "deploy-local": "graph deploy damx0x/damx-ftm-prices --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "remove-local": "graph remove --node http://localhost:8020/ damx0x/damx-ftm-prices"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.21.1",
+    "@graphprotocol/graph-ts": "0.20.0"
+  }
+}

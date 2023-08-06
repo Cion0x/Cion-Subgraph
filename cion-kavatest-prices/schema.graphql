@@ -1,0 +1,49 @@
+enum Period {
+  hourly
+  daily
+  weekly
+  total
+}
+
+type ChainlinkPrice @entity {
+  id: ID!
+  token: String!
+  value: BigInt!
+  timestamp: Int!
+  period: String!
+}
+
+type CandlePrice @entity {
+  id: ID!
+  token: String!
+  timestamp: Int!
+  period: String!
+  open: BigInt!
+  close: BigInt!
+  high: BigInt!
+  low: BigInt!
+}
+
+type Volume @entity {
+  id: ID!
+  token: String!
+  timestamp: Int!
+  action: String!
+  volume: BigInt!
+}
+
+type UserTVL @entity {
+  id: ID!
+  account: String!
+  amount: BigInt!
+  timestamp: Int!
+  period: String!
+}
+
+type UserVolume @entity {
+  id: ID!
+  account: String!
+  volume: BigInt!
+  timestamp: Int!
+  period: String!
+}
